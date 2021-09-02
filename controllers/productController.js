@@ -12,6 +12,7 @@ const getProducts = async (req, res) => {
 
   try {
     const products = await Product.find()
+      .populate("category", "_id name")
       .sort({ createdAt: -1 })
       .limit(limit)
       .skip(skip);
@@ -24,7 +25,10 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   try {
     const _id = req.params.id;
-    const product = await Product.findById({ _id });
+    const product = await Product.findById({ _id }).populate(
+      "category",
+      "_id name"
+    );
     return res.status(200).send(product);
   } catch (error) {
     return res.status(400).send(error);
